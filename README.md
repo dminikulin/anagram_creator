@@ -11,7 +11,9 @@ How to use:
 5. If you enter at least 1 extra symbol, not present in original sentence, the program will pick that up and show you a warning.
 6. If you use all the characters from original sentence, the program will show you a success message!
 
-Next steps:
+~~Next steps:~~
 
 1. ~~Animations.~~
 2. ~~Toggle for ideal and non-ideal anagrams (non-ideal anagrams can use extra characters).~~
+
+**All additional steps are completed! Enjoy the project!**
