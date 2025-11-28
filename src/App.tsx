@@ -9,14 +9,15 @@ export default function App() {
   const [anagram, setAnagram] = useState("");
   const [error, setError] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
-  const [strictCheck, setStrictCheck] = useState(false);
+  const [allowRepeats, setAllowRepeats] = useState(false);
 
   const filterChars = useCallback((str: string) => {
-    const IGNORED_CHARS = [" ", ",", "."];
     return str
       .toLowerCase()
       .split("")
-      .filter((ch) => !IGNORED_CHARS.includes(ch));
+      .filter((ch) => {
+        /[a-zA-Z0-9 ]/.test(ch);
+      });
   }, []);
 
   const countChars = (chars: string[]) => {
@@ -45,6 +46,7 @@ export default function App() {
         });
       });
     }, 300);
+    setError(false);
   };
 
   const resetOriginalSentence = () => {
@@ -64,7 +66,7 @@ export default function App() {
   };
 
   const toggleStrictCheck = () => {
-    setStrictCheck(!strictCheck);
+    setAllowRepeats(!allowRepeats);
   };
 
   const hasMinRequiredChars = useCallback(() => {
@@ -85,7 +87,7 @@ export default function App() {
     const anagramChars = filterChars(anagram);
     const anagramCounts = countChars(anagramChars);
 
-    if (strictCheck) {
+    if (!allowRepeats) {
       for (const ch of Object.keys(anagramCounts)) {
         if ((anagramCounts[ch] || 0) > (originalCounts[ch] || 0)) {
           return true;
@@ -100,7 +102,7 @@ export default function App() {
     }
 
     return false;
-  }, [anagram, originalSentence, filterChars, strictCheck]);
+  }, [anagram, originalSentence, filterChars, allowRepeats]);
 
   const createdAnagram = useCallback(() => {
     const normalizedAnagram = anagram.toLowerCase().replace(/\s/g, "");
@@ -109,7 +111,7 @@ export default function App() {
       .replace(/\s/g, "");
 
     const isNotSameWord = normalizedAnagram !== normalizedOriginal;
-    const hasRequiredLength = strictCheck
+    const hasRequiredLength = !allowRepeats
       ? normalizedAnagram.length === normalizedOriginal.length
       : normalizedAnagram.length >= normalizedOriginal.length;
 
@@ -128,7 +130,7 @@ export default function App() {
     originalSentence,
     extraCharPresent,
     hasMinRequiredChars,
-    strictCheck,
+    allowRepeats,
   ]);
 
   const highlightUsedChars = useMemo(() => {
@@ -165,7 +167,7 @@ export default function App() {
   return (
     <main className="flex min-h-screen flex-col bg-stone-100">
       <h1 className="flex-shrink-0 py-10 text-center text-5xl font-semibold">
-        Anagram creator
+        Check your anagram!
       </h1>
       <div className="flex flex-grow flex-col items-center justify-center">
         {originalSentence === "" ? (
@@ -184,6 +186,12 @@ export default function App() {
               onChange={(e) => setSentenceInput(e.target.value)}
             />
             {error && <p className="text-red-500">Sentence is empty</p>}
+            <button
+              type="submit"
+              className="button my-2 rounded-full bg-zinc-800 px-5 py-2 text-zinc-50 duration-300 ease-in-out hover:bg-zinc-600"
+            >
+              Enter
+            </button>
           </form>
         ) : (
           <div
@@ -201,10 +209,10 @@ export default function App() {
               <input
                 id="strict"
                 type="checkbox"
-                checked={strictCheck}
+                checked={allowRepeats}
                 onChange={toggleStrictCheck}
               />
-              <label htmlFor="strict">Strict anagram</label>
+              <label htmlFor="strict">Allow repeats</label>
             </div>
             <div className="flex flex-col items-center justify-center">
               <p className="mb-2 text-xl">{highlightUsedChars}</p>
@@ -225,6 +233,35 @@ export default function App() {
             </div>
           </div>
         )}
+      </div>
+      <div className="flex px-10 my-20 items-center justify-center">
+        <div className="flex max-w-2xl min-w-xs flex-col items-center">
+          <h2 className="mb-4 text-center text-3xl font-semibold">
+            How to use:
+          </h2>
+          <ol className="list-decimal list-inside text-justify">
+            <li>
+              Enter your original sentence. This will be the basis of your
+              anagram.
+            </li>
+            <li>
+              After you submit the sentence, a new field will appear. This is
+              where you enter the anagram you have in mind. By default, in the
+              anagram each letter of your original sentence is used only once.
+              Basic punctuation and spaces are ignored.
+            </li>
+            <li>
+              If you want to have repeating characters in your sentence, click
+              "Allow repeats". This way, the characters from your original
+              sentence can appear in the anagram more than once.
+            </li>
+            <li>
+              The characters not present in original sentence{" "}
+              <span className="font-bold">are not allowed</span> in the anagram.
+            </li>
+            <li>If you want to start over, just press "Reset".</li>
+          </ol>
+        </div>
       </div>
     </main>
   );

@@ -1,19 +1,11 @@
-# Anagram creator
+# Check your anagram!
 
-Little program for manual anagram creation, written with React + TS + Tailwind.
+Little program for anagram checking, written with React + TS + Tailwind.
 
 How to use:
 
-1. Enter your original sentence.
-2. The field for anagram will appear automatically. Start entering the anagram.
-3. During your typing, you will see your original sentence and the used symbols will be highlighted in gray.
-4. You can select if your anagram will be strict or not. A non-strict anagram is the one that uses characters from original sentence at least once, but can be longer (e.g.: *'Aphex Twin'* => **'Next Heap With'**)
-5. If you enter at least 1 extra symbol, not present in original sentence, the program will pick that up and show you a warning.
-6. If you use all the characters from original sentence, the program will show you a success message!
-
-~~Next steps:~~
-
-1. ~~Animations.~~
-2. ~~Toggle for ideal and non-ideal anagrams (non-ideal anagrams can use extra characters).~~
-
-**All additional steps are completed! Enjoy the project!**
+1. Enter your original sentence. This will be the basis of your anagram.
+2. After you submit the sentence, a new field will appear. This is where you enter the anagram you have in mind. By default, in the anagram each letter of your original sentence is used only once. Basic punctuation and spaces are ignored.
+3. If you want to have repeating characters in your sentence, click "Allow repeats". This way, the characters from your original sentence can appear in the anagram more than once.
+4. The characters not present in original sentence are not allowed in the anagram.
+5. If you want to start over, just press "Reset".
